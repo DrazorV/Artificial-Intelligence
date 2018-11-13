@@ -33,8 +33,31 @@ public class Board {
         }
     }
 
+    public Move getLastMove()
+    {
+        return lastMove;
+    }
 
-	public boolean isAvailable(int row, int col) {
+    public int getLastLetterPlayed()
+    {
+        return lastLetterPlayed;
+    }
+
+    public char[][] getGameBoard()
+    {
+        return gameBoard;
+    }
+
+    public void setLastMove(Move lastMove)
+    {
+        this.lastMove.setRow(lastMove.getRow());
+        this.lastMove.setCol(lastMove.getCol());
+        this.lastMove.setValue(lastMove.getValue());
+    }
+
+
+
+    public boolean isAvailable(int row, int col) {
 		if(gameBoard[row][col]=='o') {
 			return true;
 		}else {
