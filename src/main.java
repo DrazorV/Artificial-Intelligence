@@ -9,6 +9,13 @@ public class main {
 		Board b = new Board();
 		char opp;
 		Scanner sc = new Scanner(System.in);
+		System.out.println("Please choose difficulty by typing the appropriate number:");
+        System.out.println("1. Very Easy");
+        System.out.println("2. Easy");
+        System.out.println("3. Medium");
+        System.out.println("4. Hard");
+        System.out.println("5. Very Hard");
+        getDepth();
 		System.out.println("You want to play as black or white? Enter B or W.");
 		char start = sc.nextLine().toUpperCase().charAt(0);
 		while(start !='B' && start !='W'){
@@ -93,5 +100,15 @@ public class main {
 		}		
 		return 0;
 	}
-	
+
+    public static int getDepth() {
+        Scanner sc = new Scanner(System.in);
+        int depth = 0;
+        depth = sc.nextInt();
+        while(depth>10||depth<0) {
+            depth = sc.nextInt();
+        }
+        return depth;
+    }
+
 }
