@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class main {
@@ -7,7 +8,6 @@ public class main {
 
 	public static void main(String[] args) {
 		Board b = new Board();
-		char opp;
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please choose difficulty by typing the appropriate number:");
         System.out.println("1. Very Easy");
@@ -17,54 +17,42 @@ public class main {
         System.out.println("5. Very Hard");
         int depth = getDepth();
 		System.out.println("You want to play as black or white? Enter B or W.");
-		char start = sc.nextLine().toUpperCase().charAt(0);
-		while(start !='B' && start !='W'){
+		char player = sc.nextLine().toUpperCase().charAt(0);
+		while(player !='B' && player !='W'){
 			System.out.println("Enter B or W.");
-			start = sc.next().toUpperCase().charAt(0);
+			player = sc.next().toUpperCase().charAt(0);
 		}
-		
-		b.print(b.bo);
-
+		b.print(b);
 		while(b.finished()) {
-			if (start=='W')
-	            opp = 'B';
-	        else
-	            opp ='W';
 			r = getRowWithCheck();
 			c = getColumnWithCheck();
-			while (!b.isAvailable(r, c)  ){
-				
-				System.out.println("Enter an available position on the board");
-				r = getRowWithCheck();
-				c = getColumnWithCheck();
-				
-			}
-
-			while(!b.validation(start,r,c)){
+			while(!b.validation(player,r,c)){
 				System.out.println("Enter an available position on the board");
 				r = getRowWithCheck();
 				c = getColumnWithCheck();
 			}
-			b.bo[r][c] = start;
-			b.Flip(start, r, c);
-
-			//b.validation(start,r,c);
-			b.print(b.bo);
-			start=opp;
+			Move playMove = new Move(player,r,c);
+			b.makeMove(playMove);
+			b.Flip(playMove);
+			player = b.getLastLetterPlayed();
+			b.print(b);
 		}
 	}
-	
-	public static int getRowWithCheck() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter row coordinate");
-		int Row = sc.nextInt();
-		while(Row>8||Row<1) {
-			System.out.println("Enter a correct row coordinate (0<->7)");
-			Row = sc.nextInt();
 
+	public static int getRowWithCheck() {
+		try {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Enter row coordinate");
+			int Row = sc.nextInt();
+			while(Row>8||Row<1) {
+				System.out.println("Enter a correct row coordinate (0<->7)");
+				Row = sc.nextInt();
+			}
+			return Row-1;
+		}catch (InputMismatchException e){
+			System.out.println("Enter a correct row coordinate (0<->7)");
+			return getRowWithCheck();
 		}
-	
-		return Row-1;
 	}
 	public static int getColumnWithCheck() {
 		Scanner sc = new Scanner(System.in);
@@ -75,7 +63,7 @@ public class main {
 			System.out.println("Enter a correct column coordinate a-h");
 			col = sc.next().toLowerCase().charAt(0);
 		}
-		
+
 		return fromCharToInt(col);
 	}
 	public static int fromCharToInt(char c) {
@@ -96,8 +84,8 @@ public class main {
 			return 6;
 		case 'h':
 			return 7;
-			
-		}		
+
+		}
 		return 0;
 	}
 

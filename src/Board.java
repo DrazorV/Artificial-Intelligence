@@ -6,11 +6,8 @@ public class Board {
     private Move lastMove;
 	private char lastLetterPlayed;
 
-
-
 	public Board() {
-        lastMove = new Move();
-        lastLetterPlayed = 'W';
+		lastMove = new Move(lastLetterPlayed);
         gameBoard = new char[8][8];
 		for(int i =0; i<8;i++) {
 			for(int j = 0; j<8; j++) {
@@ -22,12 +19,11 @@ public class Board {
         gameBoard[4][3] = 'B';
         gameBoard[4][4] = 'W';
 	}
-
-    public Board(Board board)
-    {
+    public Board(Board board) {
         lastMove = board.lastMove;
         lastLetterPlayed = board.lastLetterPlayed;
         gameBoard = new char[8][8];
+        tabflip = board.tabflip;
         for(int i=0; i<3; i++)
         {
             for(int j=0; j<3; j++)
@@ -36,66 +32,53 @@ public class Board {
             }
         }
     }
+	public void setLastMove(Move lastMove) {
+		this.lastMove.setRow(lastMove.getRow());
 
+		this.lastMove.setCol(lastMove.getCol());
+		this.lastMove.setValue(lastMove.getValue());
+	}
     public Move getLastMove()
     {
         return lastMove;
     }
-
-    public int getLastLetterPlayed()
-    {
+	public void setLastLetterPlayed(char lastLetterPlayed) {
+		this.lastLetterPlayed = lastLetterPlayed;
+	}
+    public char getLastLetterPlayed() {
         return lastLetterPlayed;
     }
-
-    public char[][] getGameBoard()
-    {
-        return gameBoard;
-    }
-
-    public void setLastMove(Move lastMove)
-    {
-        this.lastMove.setRow(lastMove.getRow());
-        this.lastMove.setCol(lastMove.getCol());
-        this.lastMove.setValue(lastMove.getValue());
-    }
-
-    public void setLastLetterPlayed(char lastLetterPlayed)
-    {
-        this.lastLetterPlayed = lastLetterPlayed;
-    }
-
-    public void setGameBoard(char[][] gameBoard)
-    {
-        for(int i=0; i<3; i++)
-        {
-            for(int j=0; j<3; j++)
-            {
-                this.gameBoard[i][j] = gameBoard[i][j];
-            }
-        }
-    }
-
-
-    public boolean isAvailable(int row, int col) {
-		if(gameBoard[row][col]=='o') {
-			return true;
-		}else {
-			return false;
+	public void setGameBoard(char[][] gameBoard) {
+		for(int i=0; i<8; i++)
+		{
+			for(int j=0; j<8; j++)
+			{
+				this.gameBoard[i][j] = gameBoard[i][j];
+			}
 		}
 	}
-	public void makeMove(char c,int row, int col) {
-		if(isAvailable(row,col))
-            gameBoard[row][col] = c;
+    public char[][] getGameBoard() {
+        return gameBoard;
+    }
+    private boolean isAvailable(Move move) {
+		return gameBoard[move.getRow()][move.getCol()] == 'o';
 	}
-
-
-	public void print(char[][] board) {
+	public void makeMove(Move move) {
+		if(isAvailable(move)) {
+			gameBoard[move.getRow()][move.getCol()] = move.getValue();
+		}else{
+			System.out.println("Enter an available position on the board");
+			//row = main.getRowWithCheck();
+			//col = main.getColumnWithCheck();
+		}
+	}
+	public void print(Board board) {
 
 		System.out.println("* A B C D E F G H *");
 		for(int i= 0; i<8; i++) {
 			System.out.print(i+1+" ");
 			for(int j = 0; j<8; j++) {
-				System.out.print(board[i][j]+" ");
+				System.out.print(board.gameBoard[i][j]+" ");
 			}
 			System.out.print(i+1+" ");
 			System.out.println();
@@ -103,7 +86,6 @@ public class Board {
 		System.out.println("* A B C D E F G H *");
 
 	}
-	
 	public boolean validation(char player,int row, int col) {
 		
 		int r = row ;
@@ -172,7 +154,7 @@ public class Board {
 				}
         	}
         }catch(ArrayIndexOutOfBoundsException exception){
-        	System.out.println("aaaa" );
+
         }
         try {
         	if(gameBoard[row][col+1]==lastLetterPlayed) {
@@ -281,157 +263,117 @@ public class Board {
         }
         return false;
 	}
-
-
-	
-
-
 	public static boolean finished(){
 		return true;
 	}
-
-	public void Flip(char player,int row, int col){
-		if (player=='W')
-            lastLetterPlayed = 'B';
-        else
-            lastLetterPlayed ='W';
-		int r = row;
-		int c = col;
-		
+	public void Flip(Move move){
+		int r = move.getRow();
+		int c = move.getCol();
 		if(tabflip[0]){
 			r--;
 			c--;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					r--;
 					c--;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
-		
 		if(tabflip[1]){
 			r--;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
-					r--;					
-					
-					
+					gameBoard[r][c]=move.getValue();
+					r--;
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
-		
 		if(tabflip[2]){
 			r--;
 			c++;
 			try{
-				
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					r--;
 					c++;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
 		if(tabflip[3]){
-			
 			c++;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					c++;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
 		if(tabflip[4]){
 			r++;
 			c++;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					r++;
 					c++;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
 		if(tabflip[5]){
 			r++;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					r++;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
 		if(tabflip[6]){
 			r++;
 			c--;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					r++;
 					c--;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
 		if(tabflip[7]){
 			c--;
 			try{
 				while(gameBoard[r][c]==lastLetterPlayed){
-					gameBoard[r][c]=player;
+					gameBoard[r][c]=move.getValue();
 					c--;
-					
-					
 				}
 			}catch(ArrayIndexOutOfBoundsException exception){
-				
 	        }
-			r = row;
-			c = col;
+			r = move.getRow();
+			c = move.getCol();
 		}
 		Arrays.fill(tabflip, Boolean.FALSE);
-		
 	}
 	public boolean[][] FindMoves(char player){
 		boolean[][] FMArray = new boolean[8][8];
@@ -443,6 +385,22 @@ public class Board {
 			}
 		}
 		return FMArray;
+	}
+
+
+	public ArrayList<Board> getChildren(char letter) {
+		ArrayList<Board> children = new ArrayList<>();
+		boolean[][] finder = FindMoves(letter);
+		for (int i=0;i<8;i++){
+			for (int j=0;j<8;j++){
+				if(finder[i][j]=true){
+					Board child = new Board(this);
+					child.makeMove(new Move(letter,i,j));
+					children.add(child);
+				}
+			}
+		}
+		return children;
 	}
 
 }
