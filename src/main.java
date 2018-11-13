@@ -15,7 +15,7 @@ public class main {
         System.out.println("3. Medium");
         System.out.println("4. Hard");
         System.out.println("5. Very Hard");
-        getDepth();
+        int depth = getDepth();
 		System.out.println("You want to play as black or white? Enter B or W.");
 		char start = sc.nextLine().toUpperCase().charAt(0);
 		while(start !='B' && start !='W'){
@@ -106,6 +106,7 @@ public class main {
         int depth = 0;
         depth = sc.nextInt();
         while(depth>10||depth<0) {
+            System.out.println("Please enter a valid number from 1 to 5.");
             depth = sc.nextInt();
         }
         return depth;
