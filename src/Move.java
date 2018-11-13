@@ -6,19 +6,28 @@ public class Move
 {
 	private int row;
 	private int col;
-	private char value;
+	private int value;
+	private int counter;
+	private char player;
 	
-	public Move(char value)
+	public Move(char player)
 	{
 		row = -1;
 		col = -1;
-		this.value = value;
+		this.player = player;
+		this.value = 0;
 }
 	
-	public Move( char value,int row, int col)
+	public Move( char player,int row, int col,int value)
 	{
 		this.row = row;
 		this.col = col;
+		this.value = value;
+		this.player = player;
+	}
+
+	public Move(int value)
+	{
 		this.value = value;
 	}
 
@@ -32,7 +41,7 @@ public class Move
 		return col;
 	}
 	
-	public char getValue()
+	public int getValue()
 	{
 		return value;
 	}
@@ -47,8 +56,24 @@ public class Move
 		this.col = col;
 	}
 	
-	public void setValue(char value)
+	public void setValue(int value)
 	{
 		this.value = value;
+	}
+
+	public void setPlayer(char player){
+		 this.player=player;
+	}
+
+	public char getPlayer(){
+		return player;
+	}
+
+	public char getOpp(){
+		if (getPlayer()=='W'){
+			return 'B';
+		}else{
+			return 'W';
+		}
 	}
 }

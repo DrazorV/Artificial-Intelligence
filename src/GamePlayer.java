@@ -1,30 +1,31 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.BinaryOperator;
 
 public class GamePlayer
 {
     //Variable that holds the maximum depth the MiniMax algorithm will reach for this player
 	private int maxDepth;
     //Variable that holds which letter this player controls
-	private int playerLetter;
+	private char botletter;
 
 	public GamePlayer()
 	{
 		maxDepth = 2;
-		playerLetter = 'B';
+        botletter = 'B';
 	}
 
 	public GamePlayer(int maxDepth, char playerLetter)
 	{
 		this.maxDepth = maxDepth;
-		this.playerLetter = playerLetter;
+		this.botletter = playerLetter;
 	}
 
     //Initiates the MiniMax algorithm
 	public Move MiniMax(Board board)
 	{
         //If the X plays then it wants to MAXimize the heuristics value
-        if (playerLetter == 'B')
+        if (botletter == 'B')
         {
             return max(new Board(board), 0);
         }
@@ -43,13 +44,13 @@ public class GamePlayer
         /* If MAX is called on a state that is terminal or after a maximum depth is reached,
          * then a heuristic is calculated on the state and the move returned.
          */
-		if((board.finished()) || (depth == maxDepth))
+		if((board.isTerminal()) || (depth == maxDepth))
 		{
-			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
+			Move lastMove = new Move(botletter,board.getLastMove().getRow(), board.getLastMove().getCol(), Board.sBOARD_VALUE[board.getLastMove().getRow()][board.getLastMove().getCol()]);
 			return lastMove;
 		}
         //The children-moves of the state are calculated
-		ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.X));
+		ArrayList<Board> children = new ArrayList<>(board.getChildren(board,botletter));
 		Move maxMove = new Move(Integer.MIN_VALUE);
 		for (Board child : children)
 		{
@@ -86,10 +87,10 @@ public class GamePlayer
 
 		if((board.isTerminal()) || (depth == maxDepth))
 		{
-			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
+            Move lastMove = new Move(botletter,board.getLastMove().getRow(), board.getLastMove().getCol(), Board.sBOARD_VALUE[board.getLastMove().getRow()][board.getLastMove().getCol()]);
 			return lastMove;
 		}
-		ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.O));
+		ArrayList<Board> children = new ArrayList<Board>(board.getChildren(board,botletter));
 		Move minMove = new Move(Integer.MAX_VALUE);
 		for (Board child : children)
 		{
