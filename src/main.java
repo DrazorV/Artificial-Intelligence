@@ -105,7 +105,7 @@ public class main {
         Scanner sc = new Scanner(System.in);
         int depth = 0;
         depth = sc.nextInt();
-        while(depth>10||depth<0) {
+        while(depth>5||depth<1) {
             System.out.println("Please enter a valid number from 1 to 5.");
             depth = sc.nextInt();
         }
