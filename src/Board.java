@@ -5,8 +5,12 @@ public class Board {
 	private boolean[] tabflip = new boolean[8];
     private Move lastMove;
 	private char lastLetterPlayed;
-	public Board() {
 
+
+
+	public Board() {
+        lastMove = new Move();
+        lastLetterPlayed = 'W';
         gameBoard = new char[8][8];
 		for(int i =0; i<8;i++) {
 			for(int j = 0; j<8; j++) {
@@ -55,6 +59,21 @@ public class Board {
         this.lastMove.setValue(lastMove.getValue());
     }
 
+    public void setLastLetterPlayed(char lastLetterPlayed)
+    {
+        this.lastLetterPlayed = lastLetterPlayed;
+    }
+
+    public void setGameBoard(char[][] gameBoard)
+    {
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<3; j++)
+            {
+                this.gameBoard[i][j] = gameBoard[i][j];
+            }
+        }
+    }
 
 
     public boolean isAvailable(int row, int col) {
@@ -64,7 +83,7 @@ public class Board {
 			return false;
 		}
 	}
-	public void placeMove(char c,int row, int col) {
+	public void makeMove(char c,int row, int col) {
 		if(isAvailable(row,col))
             gameBoard[row][col] = c;
 	}
