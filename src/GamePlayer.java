@@ -26,12 +26,12 @@
 //        //If the X plays then it wants to MAXimize the heuristics value
 //        if (playerLetter == 'B')
 //        {
-//            return max(new Board(board.bo), 0);
+//            return max(new Board(board), 0);
 //        }
 //        //If the O plays then it wants to MINimize the heuristics value
 //        else
 //        {
-//            return min(new Board(board.bo), 0);
+//            return min(new Board(board), 0);
 //        }
 //	}
 //
@@ -43,7 +43,7 @@
 //        /* If MAX is called on a state that is terminal or after a maximum depth is reached,
 //         * then a heuristic is calculated on the state and the move returned.
 //         */
-//		if((board.finished()) || (depth == maxDepth))
+//		if((board.isTerminal()) || (depth == maxDepth))
 //		{
 //			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
 //			return lastMove;

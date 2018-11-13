@@ -1,24 +1,41 @@
 import java.util.*;
 
 public class Board {
-	public char[][] bo = new char[8][8];
+    private char [][] gameBoard;
 	private boolean[] tabflip = new boolean[8];
-	private char opp;
+    private Move lastMove;
+	private char lastLetterPlayed;
 	public Board() {
+
+        gameBoard = new char[8][8];
 		for(int i =0; i<8;i++) {
 			for(int j = 0; j<8; j++) {
-				bo[i][j] = 'o';
+                gameBoard[i][j] = 'o';
 			}
 		}
-		bo[3][3] = 'W';
-		bo[3][4] = 'B';
-		bo[4][3] = 'B';
-		bo[4][4] = 'W';
+        gameBoard[3][3] = 'W';
+        gameBoard[3][4] = 'B';
+        gameBoard[4][3] = 'B';
+        gameBoard[4][4] = 'W';
 	}
+
+    public Board(Board board)
+    {
+        lastMove = board.lastMove;
+        lastLetterPlayed = board.lastLetterPlayed;
+        gameBoard = new char[8][8];
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<3; j++)
+            {
+                gameBoard[i][j] = board.gameBoard[i][j];
+            }
+        }
+    }
 
 
 	public boolean isAvailable(int row, int col) {
-		if(bo[row][col]=='o') {
+		if(gameBoard[row][col]=='o') {
 			return true;
 		}else {
 			return false;
@@ -26,7 +43,7 @@ public class Board {
 	}
 	public void placeMove(char c,int row, int col) {
 		if(isAvailable(row,col))
-			bo[row][col] = c;
+            gameBoard[row][col] = c;
 	}
 
 
@@ -50,18 +67,18 @@ public class Board {
 		int r = row ;
 		int c = col;
         if (player=='W')
-            opp = 'B';
+            lastLetterPlayed = 'B';
         else
-            opp ='W';
+            lastLetterPlayed ='W';
         try {
-        	if(bo[row-1][col-1]==opp){
+        	if(gameBoard[row-1][col-1]==lastLetterPlayed){
         		r = row-1;
         		c = col-1;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					r--;
 					c--;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -75,13 +92,13 @@ public class Board {
 
         }
         try {
-        	if(bo[row-1][col]==opp) {
+        	if(gameBoard[row-1][col]==lastLetterPlayed) {
         		r = row-1;
         		c = col;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					r--;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -95,14 +112,14 @@ public class Board {
         	
         }
         try {
-        	if(bo[row-1][col+1]==opp) {
+        	if(gameBoard[row-1][col+1]==lastLetterPlayed) {
         		r = row-1;
         		c = col+1;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					r--;
 					c++;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -116,13 +133,13 @@ public class Board {
         	System.out.println("aaaa" );
         }
         try {
-        	if(bo[row][col+1]==opp) {
+        	if(gameBoard[row][col+1]==lastLetterPlayed) {
         		r = row ;
         		c = col+1;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					c++;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -136,14 +153,14 @@ public class Board {
 			System.out.println("aaaa" );
         }
         try {
-        	if(bo[row+1][col+1]==opp) {
+        	if(gameBoard[row+1][col+1]==lastLetterPlayed) {
         		r = row+1;
         		c = col+1;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					r++;
 					c++;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -157,13 +174,13 @@ public class Board {
         	
         }
         try {
-        	if(bo[row+1][col]==opp) {
+        	if(gameBoard[row+1][col]==lastLetterPlayed) {
         		r = row+1;
         		c = col ;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					r++;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -177,14 +194,14 @@ public class Board {
         	
         }
         try {
-        	if(bo[row+1][col-1]==opp) {
+        	if(gameBoard[row+1][col-1]==lastLetterPlayed) {
         		r = row+1;
         		c = col-1;
         		boolean flag=true;
-        		while(bo[r][c]==opp) {
+        		while(gameBoard[r][c]==lastLetterPlayed) {
         			r++;
         			c--;
-        			if(bo[r][c]=='o') {
+        			if(gameBoard[r][c]=='o') {
         				flag=false;
 						break;
 					}
@@ -198,13 +215,13 @@ public class Board {
         	
         }
         try {
-        	if(bo[row][col-1]==opp) {
+        	if(gameBoard[row][col-1]==lastLetterPlayed) {
         		r = row ;
         		c = col-1;
 				boolean flag=true;
-				while(bo[r][c]==opp) {
+				while(gameBoard[r][c]==lastLetterPlayed) {
 					c--;
-					if(bo[r][c]=='o') {
+					if(gameBoard[r][c]=='o') {
 						flag=false;
 						break;
 					}
@@ -233,9 +250,9 @@ public class Board {
 
 	public void Flip(char player,int row, int col){
 		if (player=='W')
-            opp = 'B';
+            lastLetterPlayed = 'B';
         else
-            opp ='W';
+            lastLetterPlayed ='W';
 		int r = row;
 		int c = col;
 		
@@ -243,8 +260,8 @@ public class Board {
 			r--;
 			c--;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					r--;
 					c--;
 					
@@ -260,8 +277,8 @@ public class Board {
 		if(tabflip[1]){
 			r--;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					r--;					
 					
 					
@@ -278,8 +295,8 @@ public class Board {
 			c++;
 			try{
 				
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					r--;
 					c++;
 					
@@ -295,8 +312,8 @@ public class Board {
 			
 			c++;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					c++;
 					
 					
@@ -311,8 +328,8 @@ public class Board {
 			r++;
 			c++;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					r++;
 					c++;
 					
@@ -327,8 +344,8 @@ public class Board {
 		if(tabflip[5]){
 			r++;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					r++;
 					
 					
@@ -343,8 +360,8 @@ public class Board {
 			r++;
 			c--;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					r++;
 					c--;
 					
@@ -359,8 +376,8 @@ public class Board {
 		if(tabflip[7]){
 			c--;
 			try{
-				while(bo[r][c]==opp){
-					bo[r][c]=player;
+				while(gameBoard[r][c]==lastLetterPlayed){
+					gameBoard[r][c]=player;
 					c--;
 					
 					
