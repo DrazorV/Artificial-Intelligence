@@ -12,79 +12,48 @@ public class main {
 		b.setLastLetterPlayed('W');
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please choose difficulty by typing the appropriate number:");
-        System.out.println("1. Very Easy");
-        System.out.println("2. Easy");
-        System.out.println("3. Medium");
-        System.out.println("4. Hard");
-        System.out.println("5. Very Hard");
-        int depth = getDepth();
+		System.out.println("1. Very Easy");
+		System.out.println("2. Easy");
+		System.out.println("3. Medium");
+		System.out.println("4. Hard");
+		System.out.println("5. Very Hard");
+		int depth = getDepth();
 		System.out.println("You want to play as black or white? Enter B or W.");
 		char player = sc.nextLine().toUpperCase().charAt(0);
-		while(player !='B' && player !='W'){
+		while (player != 'B' && player != 'W') {
 			System.out.println("Enter B or W.");
 			player = sc.next().toUpperCase().charAt(0);
 		}
-
-
-
-
-
-
-		GamePlayer playerB = new GamePlayer(depth, 'W');
-		GamePlayer playerW = new GamePlayer(depth, 'B');
+		char comp = (player == 'B') ? 'W' : 'B';
+		GamePlayer computer = new GamePlayer(depth, comp);
 
 		b.print(b);
-
-
-		while(!b.isTerminal()) {
-			switch (b.getLastLetterPlayed()) {
-				case 'W':
-						if(player=='B'){
-							r = getRowWithCheck();
-							c = getColumnWithCheck();
-							while(!b.isValidMove(b.getGameBoard(),player,r,c)){
-								System.out.println("Enter an available position on the board");
-								r = getRowWithCheck();
-								c = getColumnWithCheck();
-							}
-							Move playMove = new Move(player);
-							playMove.setCol(c);
-							playMove.setRow(r);
-							b.makeMove(playMove);
-							b.flip(b.getGameBoard(),playMove.getPlayer(),r,c);
-							b.print(b);
-
-						}else{
-							System.out.println("Bot is thinking...");
-							Move WMove = playerW.MiniMax(b);
-							b.makeMove(WMove);
-						}
-					break;
-				case 'B':
-					if(player=='W'){
-						r = getRowWithCheck();
-						c = getColumnWithCheck();
-						while(!b.isValidMove(b.getGameBoard(),player,r,c)){
-							System.out.println("Enter an available position on the board");
-							r = getRowWithCheck();
-							c = getColumnWithCheck();
-						}
-						Move playMove = new Move(player);
-						playMove.setCol(c);
-						playMove.setRow(r);
-						b.makeMove(playMove);
-						b.Flip(playMove);
-						b.print(b);
-					}else{
-						System.out.println("Bot is thinking...");
-						Move BMove = playerB.MiniMax(b);
-						b.makeMove(BMove);
-					}
-					break;
+		while (!b.isTerminal()) {
+			if (b.getLastLetterPlayed() == player) {
+				System.out.println("Bot is thinking...");
+				Move WMove = computer.MiniMax(b);
+				b.makeMove(WMove);
+				b.flip(b.getGameBoard(), WMove.getPlayer(), WMove.getRow(), WMove.getCol());
+				b.print(b);
 			}
+			if (b.getLastLetterPlayed() == comp) {
+				r = getRowWithCheck();
+				c = getColumnWithCheck();
+				while (!b.isValidMove(b.getGameBoard(), player, r, c)) {
+					System.out.println("Enter an available position on the board");
+					r = getRowWithCheck();
+					c = getColumnWithCheck();
+				}
+				Move playMove = new Move(player);
+				playMove.setCol(c);
+				playMove.setRow(r);
+				b.makeMove(playMove);
+				b.flip(b.getGameBoard(), playMove.getPlayer(), r, c);
+				b.print(b);
+			}
+
 		}
 	}
-
 	public static int getRowWithCheck() {
 		try {
 			Scanner sc = new Scanner(System.in);

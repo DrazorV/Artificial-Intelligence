@@ -50,8 +50,9 @@ public class GamePlayer
 			return lastMove;
 		}
         //The children-moves of the state are calculated
-		ArrayList<Board> children = new ArrayList<>(board.getChildren(board,botletter));
+		ArrayList<Board> children = board.getChildren(board,botletter);
 		Move maxMove = new Move(Integer.MIN_VALUE);
+        maxMove.setPlayer(botletter);
 		for (Board child : children)
 		{
             //And for each child min is called, on a lower depth
@@ -90,24 +91,22 @@ public class GamePlayer
             Move lastMove = new Move(botletter,board.getLastMove().getRow(), board.getLastMove().getCol(), Board.sBOARD_VALUE[board.getLastMove().getRow()][board.getLastMove().getCol()]);
 			return lastMove;
 		}
-		ArrayList<Board> children = new ArrayList<Board>(board.getChildren(board,botletter));
+        ArrayList<Board> children = board.getChildren(board,botletter);
 		Move minMove = new Move(Integer.MAX_VALUE);
-		for (Board child : children)
-		{
+		minMove.setPlayer(botletter);
+		for (Board child : children){
 			Move move = max(child, depth + 1);
 			if(move.getValue() <= minMove.getValue())
 			{
                 if ((move.getValue() == minMove.getValue()))
                 {
-                    if (r.nextInt(2) == 0)
-                    {
+                    if (r.nextInt(2) == 0){
                         minMove.setRow(child.getLastMove().getRow());
                         minMove.setCol(child.getLastMove().getCol());
                         minMove.setValue(move.getValue());
                     }
                 }
-                else
-                {
+                else{
                         minMove.setRow(child.getLastMove().getRow());
                         minMove.setCol(child.getLastMove().getCol());
                         minMove.setValue(move.getValue());

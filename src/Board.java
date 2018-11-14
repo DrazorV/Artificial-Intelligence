@@ -2,7 +2,6 @@ import java.util.*;
 
 public class Board {
     private char [][] gameBoard;
-	private boolean[] tabflip = new boolean[8];
     private Move lastMove;
 	private char lastLetterPlayed;
 
@@ -23,7 +22,6 @@ public class Board {
         lastMove = board.lastMove;
         lastLetterPlayed = board.lastLetterPlayed;
         gameBoard = new char[8][8];
-        tabflip = board.tabflip;
         for(int i=0; i<8; i++)
         {
             for(int j=0; j<8; j++)
@@ -109,6 +107,7 @@ public class Board {
 		System.out.println("* A B C D E F G H *");
 
 	}
+
 	private static final int[] row_offset = {-1, -1, -1,  0,  0,  1,  1,  1};
 	private static final int[] col_offset = {-1,  0,  1, -1,  1, -1,  0,  1};
 
@@ -116,9 +115,7 @@ public class Board {
 		// check whether this square is empty
 		if (board[row][col] != 'o')
 			return false;
-
 		char oppPiece = (piece == 'B') ? 'W' : 'B';
-
 		boolean isValid = false;
 		// check 8 directions
 		for (int i = 0; i < 8; ++i) {
@@ -126,7 +123,6 @@ public class Board {
 			int curCol = col + col_offset[i];
 			boolean hasOppPieceBetween = false;
 			while (curRow >=0 && curRow < 8 && curCol >= 0 && curCol < 8) {
-
 				if (board[curRow][curCol] == oppPiece)
 					hasOppPieceBetween = true;
 				else if ((board[curRow][curCol] == piece) && hasOppPieceBetween)
@@ -136,7 +132,6 @@ public class Board {
 				}
 				else
 					break;
-
 				curRow += row_offset[i];
 				curCol += col_offset[i];
 			}
@@ -153,9 +148,8 @@ public class Board {
 	}
 
 
-	public char[][] flip(char[][] board, char piece, int row, int col) {
+	public void flip(char[][] board, char piece, int row, int col) {
 		board[row][col] = piece;
-
 		// check 8 directions
 		for (int i = 0; i < 8; ++i) {
 			int curRow = row + row_offset[i];
@@ -165,10 +159,8 @@ public class Board {
 				// if empty square, break
 				if (board[curRow][curCol] == 'o')
 					break;
-
 				if (board[curRow][curCol] != piece)
 					hasOppPieceBetween = true;
-
 				if ((board[curRow][curCol] == piece) && hasOppPieceBetween)
 				{
 					int effectPieceRow = row + row_offset[i];
@@ -179,25 +171,20 @@ public class Board {
 						effectPieceRow += row_offset[i];
 						effectPieceCol += col_offset[i];
 					}
-
 					break;
 				}
-
 				curRow += row_offset[i];
 				curCol += col_offset[i];
 			}
 		}
-
-		return board;
 	}
-
 
 
 	public boolean[][] FindMoves(Board board,char player){
 		boolean[][] FMArray = new boolean[8][8];
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
-				if(board.isValidMove(board.getGameBoard(),player, i, j)) {
+				if(isValidMove(board.getGameBoard(),player, i, j)) {
 					FMArray[i][j]=true;
 				}
 			}
@@ -210,12 +197,15 @@ public class Board {
 	public ArrayList<Board> getChildren(Board board,char letter) {
 		ArrayList<Board> children = new ArrayList<>();
 		boolean[][] finder = FindMoves(board,letter);
+		Board iniBoard = board;
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
-				if(finder[i][j]=true){
-					Board child = new Board(this);
+				if(finder[i][j]){
+					Board child = new Board(iniBoard);
 					Move move = new Move(letter,i,j,sBOARD_VALUE[i][j]);
 					child.makeMove(move);
+					child.flip(child.getGameBoard(),letter,i,j);
+					move.setValue(evaluateBoard(child.getGameBoard(),move));
 					children.add(child);
 				}
 			}
