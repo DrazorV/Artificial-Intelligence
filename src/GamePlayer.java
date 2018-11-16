@@ -8,12 +8,6 @@ public class GamePlayer
     //Variable that holds which letter this player controls
 	private char botletter;
 
-	public GamePlayer()
-	{
-		maxDepth = 2;
-        botletter = 'B';
-	}
-
 	public GamePlayer(int maxDepth, char playerLetter)
 	{
 		this.maxDepth = maxDepth;
@@ -43,7 +37,7 @@ public class GamePlayer
         /* If MAX is called on a state that is terminal or after a maximum depth is reached,
          * then a heuristic is calculated on the state and the move returned.
          */
-		if((board.isTerminal()) || (depth == maxDepth))
+		if((board.isTerminal) || (depth == maxDepth))
 		{
 			Move lastMove = new Move(botletter,board.getLastMove().getRow(), board.getLastMove().getCol(), Board.sBOARD_VALUE[board.getLastMove().getRow()][board.getLastMove().getCol()]);
 			return lastMove;
@@ -85,7 +79,7 @@ public class GamePlayer
 	{
         Random r = new Random();
 
-		if((board.isTerminal()) || (depth == maxDepth))
+		if((board.isTerminal) || (depth == maxDepth))
 		{
             Move lastMove = new Move(botletter,board.getLastMove().getRow(), board.getLastMove().getCol(), Board.sBOARD_VALUE[board.getLastMove().getRow()][board.getLastMove().getCol()]);
 			return lastMove;

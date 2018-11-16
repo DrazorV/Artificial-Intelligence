@@ -4,6 +4,7 @@ public class Board {
     private char [][] gameBoard;
     private Move lastMove;
 	private char lastLetterPlayed;
+	public boolean isTerminal;
 	
 	
 	public Board() {
@@ -55,6 +56,11 @@ public class Board {
 		return score;
 	}
 
+
+	public void setTerminal(){
+		isTerminal = true;
+	}
+
 	public void setLastMove(Move lastMove) {
 		this.lastMove.setRow(lastMove.getRow());
 
@@ -71,29 +77,15 @@ public class Board {
     public char getLastLetterPlayed() {
         return lastLetterPlayed;
     }
-	public void setGameBoard(char[][] gameBoard) {
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
-				this.gameBoard[i][j] = gameBoard[i][j];
-			}
-		}
-	}
     public char[][] getGameBoard() {
         return gameBoard;
     }
-    private boolean isAvailable(Move move) {
-		return gameBoard[move.getRow()][move.getCol()] == 'o';
-	}
+
 	public void makeMove(Move move) {
 
 			gameBoard[move.getRow()][move.getCol()] = move.getPlayer();
 			lastMove = move;
 			lastLetterPlayed = move.getPlayer();
-			
-			//row = main.getRowWithCheck();
-			//col = main.getColumnWithCheck();
 	}
 	public void print(Board board) {
 		System.out.println();
@@ -144,12 +136,6 @@ public class Board {
 
 		return isValid;
 	}
-
-
-	public static boolean isTerminal(){
-		return false;
-	}
-
 
 	public void flip(char[][] board, char piece, int row, int col) {
 		board[row][col] = piece;
