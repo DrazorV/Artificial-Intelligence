@@ -7,7 +7,7 @@ public class Move
 	private int row;
 	private int col;
 	private int value;
-	private int counter;
+	
 	private char player;
 	
 	public Move(char player)

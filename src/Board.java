@@ -4,7 +4,8 @@ public class Board {
     private char [][] gameBoard;
     private Move lastMove;
 	private char lastLetterPlayed;
-
+	
+	
 	public Board() {
 		lastMove = new Move(lastLetterPlayed);
         gameBoard = new char[8][8];
@@ -90,11 +91,12 @@ public class Board {
 			gameBoard[move.getRow()][move.getCol()] = move.getPlayer();
 			lastMove = move;
 			lastLetterPlayed = move.getPlayer();
+			
 			//row = main.getRowWithCheck();
 			//col = main.getColumnWithCheck();
 	}
 	public void print(Board board) {
-
+		System.out.println();
 		System.out.println("* A B C D E F G H *");
 		for(int i= 0; i<8; i++) {
 			System.out.print(i+1+" ");
@@ -105,6 +107,7 @@ public class Board {
 			System.out.println();
 		}
 		System.out.println("* A B C D E F G H *");
+		System.out.println();
 
 	}
 
@@ -191,7 +194,16 @@ public class Board {
 		}
 		return FMArray;
 	}
-
+	public boolean hasMoves(char player){
+		for (int i=0;i<8;i++){
+			for (int j=0;j<8;j++){
+				if(isValidMove(this.getGameBoard(),player, i, j)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 
 	public ArrayList<Board> getChildren(Board board,char letter) {

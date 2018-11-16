@@ -4,8 +4,10 @@ import java.util.Scanner;
 public class main {
 	static int r;
 	static int c;
+	static int counter;
+	static int bMarks = 2;
+	static int wMarks = 2;
 	
-
 	public static void main(String[] args) {
 
 		Board b = new Board();
@@ -18,7 +20,7 @@ public class main {
 		System.out.println("4. Hard");
 		System.out.println("5. Very Hard");
 		int depth = getDepth();
-		System.out.println("You want to play as black or white? Enter B or W.");
+		System.out.println("You want to play as black or white? Enter B or W (Black plays first).");
 		char player = sc.nextLine().toUpperCase().charAt(0);
 		while (player != 'B' && player != 'W') {
 			System.out.println("Enter B or W.");
@@ -28,32 +30,92 @@ public class main {
 		GamePlayer computer = new GamePlayer(depth, comp);
 
 		b.print(b);
-		while (!b.isTerminal()) {
-			if (b.getLastLetterPlayed() == player) {
-				System.out.println("Bot is thinking...");
-				Move WMove = computer.MiniMax(b);
-				b.makeMove(WMove);
-				b.flip(b.getGameBoard(), WMove.getPlayer(), WMove.getRow(), WMove.getCol());
-				b.print(b);
+		totalMoves(player,comp,b);
+		while (true) {
+			counter=0;
+			
+			if (b.getLastLetterPlayed() == player  ) {
+				if(!b.hasMoves(comp)){
+					counter++;
+					System.out.println("Computer has no valid moves");
+					b.setLastLetterPlayed(comp);
+					
+				}
+				else{
+					System.out.println("Bot is thinking...");
+					//System.out.println();
+					Move WMove = computer.MiniMax(b);
+					b.makeMove(WMove);
+					b.flip(b.getGameBoard(), WMove.getPlayer(), WMove.getRow(), WMove.getCol());
+					b.print(b);
+					totalMoves(player,comp,b);
+				}
+				
 			}
-			if (b.getLastLetterPlayed() == comp) {
-				r = getRowWithCheck();
-				c = getColumnWithCheck();
-				while (!b.isValidMove(b.getGameBoard(), player, r, c)) {
-					System.out.println("Enter an available position on the board");
+
+			if (b.getLastLetterPlayed() == comp ) {
+				if(!b.hasMoves(player)){
+					counter++;
+					System.out.println("You have no valid moves");
+					b.setLastLetterPlayed(player);
+				}
+				else{
 					r = getRowWithCheck();
 					c = getColumnWithCheck();
+					while (!Board.isValidMove(b.getGameBoard(), player, r, c)) {
+						System.out.println("Enter an available position on the board");
+						r = getRowWithCheck();
+						c = getColumnWithCheck();
+					}
+					Move playMove = new Move(player);
+					playMove.setCol(c);
+					playMove.setRow(r);
+					b.makeMove(playMove);
+					b.flip(b.getGameBoard(), playMove.getPlayer(), r, c);
+					b.print(b);
+					totalMoves(player,comp,b);
 				}
-				Move playMove = new Move(player);
-				playMove.setCol(c);
-				playMove.setRow(r);
-				b.makeMove(playMove);
-				b.flip(b.getGameBoard(), playMove.getPlayer(), r, c);
-				b.print(b);
+				if(counter==2){
+					System.out.println("Both players have no valid moves. Game ended!");
+					winnerWinner(player,comp,b);
+					break;
+				}
+				
 			}
+			
 
 		}
 	}
+	public static void winnerWinner(char player,char comp, Board b) {
+		System.out.println();
+		if(getMarksByPlayer(comp, b)>getMarksByPlayer(player,b)) {
+			System.out.println("Winner COMPUTER with total "+getMarksByPlayer(comp,b)+" marks on the board.");
+		}else if (getMarksByPlayer(comp, b)<getMarksByPlayer(player,b)){
+			System.out.println("Winner USER with total "+getMarksByPlayer(comp,b)+" marks on the board.");
+		}else {
+			System.out.println("ITS A DRAW.");
+		}
+		
+	}
+	
+	public static void totalMoves(char player,char comp, Board b) {
+		System.out.println("AI Score: " + getMarksByPlayer(comp, b));
+		System.out.println("Your Score: " + getMarksByPlayer(player,b));
+	}
+	public static int getMarksByPlayer(char player,Board b) {
+		int n = 0;
+		char[][] bo = b.getGameBoard();
+		for(int i = 0; i<8; i++) {
+			for(int j=0; j<8; j++) {
+				if(bo[i][j]==player) {
+					n++;
+				}
+			}
+		}
+		return n;
+	}
+		
+	
 	public static int getRowWithCheck() {
 		try {
 			Scanner sc = new Scanner(System.in);
@@ -112,7 +174,8 @@ public class main {
             System.out.println("Please enter a valid number from 1 to 5.");
             depth = sc.nextInt();
         }
-        return depth;
+        System.out.println("You have selected difficulty : " + depth+".");
+        return depth*2;
     }
 
 }
