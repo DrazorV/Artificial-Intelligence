@@ -1,13 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class main {
-	static int r;
-	static int c;
-	static int counter;
-	static int bMarks = 2;
-	static int wMarks = 2;
-	
+public class Reversi {
 	public static void main(String[] args) {
 
 		Board b = new Board();
@@ -30,7 +24,7 @@ public class main {
 		b.print(b);
 		totalMoves(player,comp,b);
 		while (true) {
-			counter=0;
+			int counter = 0;
 			
 			if (b.getLastLetterPlayed() == player  ) {
 				if(!b.hasMoves(comp)){
@@ -41,13 +35,13 @@ public class main {
 				}
 				else{
 					System.out.println("Bot is thinking...");
-					//System.out.println();
 					Move WMove = computer.MiniMax(b);
 					b.makeMove(WMove);
 					Move.print(WMove);
 					b.flip(b.getGameBoard(), WMove.getPlayer(), WMove.getRow(), WMove.getCol());
 					b.print(b);
 					totalMoves(player,comp,b);
+					b.setLastMove(WMove);
 					System.out.println();
 				}
 				
@@ -60,8 +54,8 @@ public class main {
 					b.setLastLetterPlayed(player);
 				}
 				else{
-					r = getRowWithCheck();
-					c = getColumnWithCheck();
+					int r = getRowWithCheck();
+					int c = getColumnWithCheck();
 					while (!Board.isValidMove(b.getGameBoard(), player, r, c)) {
 						System.out.println("Enter an available position on the board");
 						r = getRowWithCheck();
@@ -72,12 +66,12 @@ public class main {
 					playMove.setRow(r);
 					b.makeMove(playMove);
 					b.flip(b.getGameBoard(), playMove.getPlayer(), r, c);
-					playMove.setValue(Board.evaluateBoard(b.getGameBoard(),playMove));
 					b.print(b);
 					totalMoves(player,comp,b);
+					b.setLastMove(playMove);
 					System.out.println();
 				}
-				if(counter==2){
+				if(counter ==2){
                     b.setTerminal();
 					System.out.println("Both players have no valid moves. Game ended!");
 					winnerWinner(player,comp,b);
@@ -89,7 +83,7 @@ public class main {
 
 		}
 	}
-	public static void winnerWinner(char player,char comp, Board b) {
+	private static void winnerWinner(char player,char comp, Board b) {
 		System.out.println();
 		if(getMarksByPlayer(comp, b)>getMarksByPlayer(player,b)) {
 			System.out.println("Computer won with total "+getMarksByPlayer(comp,b)+" marks on the board.");
@@ -101,11 +95,11 @@ public class main {
 		
 	}
 	
-	public static void totalMoves(char player,char comp, Board b) {
+	private static void totalMoves(char player,char comp, Board b) {
 		System.out.println("AI Score: " + getMarksByPlayer(comp, b));
 		System.out.println("Your Score: " + getMarksByPlayer(player,b));
 	}
-	public static int getMarksByPlayer(char player,Board b) {
+	private static int getMarksByPlayer(char player,Board b) {
 		int n = 0;
 		char[][] bo = b.getGameBoard();
 		for(int i = 0; i<8; i++) {
@@ -119,7 +113,7 @@ public class main {
 	}
 		
 	
-	public static int getRowWithCheck() {
+	private static int getRowWithCheck() {
 		try {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter row coordinate");
@@ -134,7 +128,7 @@ public class main {
 			return getRowWithCheck();
 		}
 	}
-	public static int getColumnWithCheck() {
+	private static int getColumnWithCheck() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter column coordinate");
 		char col ;
@@ -146,7 +140,7 @@ public class main {
 
 		return fromCharToInt(col);
 	}
-	public static int fromCharToInt(char c) {
+	private static int fromCharToInt(char c) {
 		switch(c) {
 		case 'a':
 			return 0;
@@ -169,16 +163,22 @@ public class main {
 		return 0;
 	}
 
-    public static int getDepth() {
+    private static int getDepth() {
         Scanner sc = new Scanner(System.in);
-        int depth = 0;
+        int depth;
         depth = sc.nextInt();
         while(depth>3||depth<1) {
             System.out.println("Please enter a valid number from 1 to 3.");
             depth = sc.nextInt();
         }
         System.out.println("You have selected difficulty : " + depth+".");
-        return depth*2;
+        if(depth==1){
+        	return 2;
+		}else if(depth == 2) {
+        	return 4;
+		}else{
+        	return 6;
+		}
     }
 
 }
