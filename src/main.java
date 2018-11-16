@@ -14,11 +14,9 @@ public class main {
 		b.setLastLetterPlayed('W');
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please choose difficulty by typing the appropriate number:");
-		System.out.println("1. Very Easy");
-		System.out.println("2. Easy");
-		System.out.println("3. Medium");
-		System.out.println("4. Hard");
-		System.out.println("5. Very Hard");
+		System.out.println("1. Easy");
+		System.out.println("2. Medium");
+		System.out.println("3. Hard");
 		int depth = getDepth();
 		System.out.println("You want to play as black or white? Enter B or W (Black plays first).");
 		char player = sc.nextLine().toUpperCase().charAt(0);
@@ -46,9 +44,11 @@ public class main {
 					//System.out.println();
 					Move WMove = computer.MiniMax(b);
 					b.makeMove(WMove);
+					Move.print(WMove);
 					b.flip(b.getGameBoard(), WMove.getPlayer(), WMove.getRow(), WMove.getCol());
 					b.print(b);
 					totalMoves(player,comp,b);
+					System.out.println();
 				}
 				
 			}
@@ -72,10 +72,13 @@ public class main {
 					playMove.setRow(r);
 					b.makeMove(playMove);
 					b.flip(b.getGameBoard(), playMove.getPlayer(), r, c);
+					playMove.setValue(Board.evaluateBoard(b.getGameBoard(),playMove));
 					b.print(b);
 					totalMoves(player,comp,b);
+					System.out.println();
 				}
 				if(counter==2){
+                    b.setTerminal();
 					System.out.println("Both players have no valid moves. Game ended!");
 					winnerWinner(player,comp,b);
 					break;
@@ -89,9 +92,9 @@ public class main {
 	public static void winnerWinner(char player,char comp, Board b) {
 		System.out.println();
 		if(getMarksByPlayer(comp, b)>getMarksByPlayer(player,b)) {
-			System.out.println("Winner COMPUTER with total "+getMarksByPlayer(comp,b)+" marks on the board.");
+			System.out.println("Computer won with total "+getMarksByPlayer(comp,b)+" marks on the board.");
 		}else if (getMarksByPlayer(comp, b)<getMarksByPlayer(player,b)){
-			System.out.println("Winner USER with total "+getMarksByPlayer(comp,b)+" marks on the board.");
+			System.out.println("You Win with total "+getMarksByPlayer(player,b)+" marks on the board.");
 		}else {
 			System.out.println("ITS A DRAW.");
 		}
@@ -170,8 +173,8 @@ public class main {
         Scanner sc = new Scanner(System.in);
         int depth = 0;
         depth = sc.nextInt();
-        while(depth>5||depth<1) {
-            System.out.println("Please enter a valid number from 1 to 5.");
+        while(depth>3||depth<1) {
+            System.out.println("Please enter a valid number from 1 to 3.");
             depth = sc.nextInt();
         }
         System.out.println("You have selected difficulty : " + depth+".");

@@ -76,4 +76,33 @@ public class Move
 			return 'W';
 		}
 	}
+
+	public static void print(Move move){
+		System.out.println("The computer chose to play on ("+(move.getRow()+1)+","+fromIntToChar(move.getCol())+")");
+	}
+
+	public static char fromIntToChar(int c) {
+		switch(c) {
+			case 0:
+				return 'A';
+			case 1:
+				return 'B';
+			case 2:
+				return 'C';
+			case 3:
+				return 'D';
+			case 4:
+				return 'E';
+			case 5:
+				return 'F';
+			case 6:
+				return 'G';
+			case 7:
+				return 'H';
+
+		}
+		return 0;
+	}
+
+
 }
