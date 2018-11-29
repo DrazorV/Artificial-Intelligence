@@ -11,6 +11,7 @@ public class Reversi {
 		System.out.println("1. Easy");
 		System.out.println("2. Medium");
 		System.out.println("3. Hard");
+		System.out.println("4. Extreme");
 		int depth = getDepth();
 		System.out.println("You want to play as black or white? Enter B or W (Black plays first).");
 		char player = sc.nextLine().toUpperCase().charAt(0);
@@ -167,18 +168,12 @@ public class Reversi {
         Scanner sc = new Scanner(System.in);
         int depth;
         depth = sc.nextInt();
-        while(depth>3||depth<1) {
-            System.out.println("Please enter a valid number from 1 to 3.");
+        while(depth>4||depth<1) {
+            System.out.println("Please enter a valid number from 1 to 4.");
             depth = sc.nextInt();
         }
         System.out.println("You have selected difficulty : " + depth+".");
-        if(depth==1){
-        	return 2;
-		}else if(depth == 2) {
-        	return 4;
-		}else{
-        	return 6;
-		}
+        return depth*8;
     }
 
 }

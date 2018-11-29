@@ -20,17 +20,17 @@ public class GamePlayer
         //If the X plays then it wants to MAXimize the heuristics value
         if (botletter == 'B')
         {
-            return max(new Board(board), 0);
+            return max(new Board(board), 0,Integer.MIN_VALUE,Integer.MAX_VALUE);
         }
         //If the O plays then it wants to MINimize the heuristics value
         else
         {
-            return min(new Board(board), 0);
+            return min(new Board(board), 0,Integer.MIN_VALUE,Integer.MAX_VALUE);
         }
 	}
 
     // The max and min functions are called interchangingly, one after another until a max depth is reached
-	public Move max(Board board, int depth)
+	public Move max(Board board, int depth,int a,int b)
 	{
         Random r = new Random();
 
@@ -49,7 +49,7 @@ public class GamePlayer
 		for (Board child : children)
 		{
             //And for each child min is called, on a lower depth
-			Move move = min(child, depth + 1);
+			Move move = min(child, depth + 1,a,b);
             //The child-move with the greatest value is selected and returned by max
 			if(move.getValue() >= maxMove.getValue())
 			{
@@ -70,12 +70,15 @@ public class GamePlayer
                     maxMove.setValue(move.getValue());
                 }
 			}
+			if(maxMove.getValue()>=b) return maxMove;
+
+            a = Math.max(a,maxMove.getValue());
 		}
 		return maxMove;
 	}
 
     //Min works similarly to max
-	public Move min(Board board, int depth)
+	public Move min(Board board, int depth,int a,int b)
 	{
         Random r = new Random();
 
@@ -88,7 +91,7 @@ public class GamePlayer
 		Move minMove = new Move(Integer.MAX_VALUE);
 		minMove.setPlayer(botletter);
 		for (Board child : children){
-			Move move = max(child, depth + 1);
+			Move move = max(child, depth + 1,a,b);
 			if(move.getValue() <= minMove.getValue())
 			{
                 if ((move.getValue() == minMove.getValue()))
@@ -105,6 +108,8 @@ public class GamePlayer
                         minMove.setValue(move.getValue());
                 }
             }
+            if(minMove.getValue()<=a) return minMove;
+            b = Math.min(b,minMove.getValue());
         }
         return minMove;
     }
